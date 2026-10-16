@@ -1,4 +1,4 @@
-[index.html](https://github.com/user-attachments/files/33535908/index.html)
+[index.html](https://github.com/user-attachments/files/33543848/index.html)
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -178,6 +178,68 @@
   .sentence-item .record-btn:hover { background: #276749; }
   .sentence-item .score-panel { margin-top: 10px; }
 
+  /* ===== 对话卡片（预设格式） ===== */
+  .dialog-scene {
+    background: #fff; border: 1px solid #f0e0d0; border-radius: 10px;
+    padding: 18px 20px; margin-bottom: 24px;
+  }
+  .dialog-scene .scene-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 8px;
+  }
+  .dialog-scene .scene-header .scene-name {
+    font-size: 15px; font-weight: 600; color: #8b2e2e;
+    padding: 8px 14px; background: #fdf0f0; border-radius: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dialog-scene .scene-header .scene-desc {
+    font-size: 12px; color: #888; background: #fafafa;
+    padding: 6px 12px; border-radius: 6px;
+  }
+  .dialog-line {
+    border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;
+    position: relative;
+  }
+  .dialog-line.role-steward { background: #fdf6ec; border-left: 4px solid #d4a017; }
+  .dialog-line.role-passenger { background: #f0f7ff; border-left: 4px solid #4a90d9; }
+  .dialog-line .role-label {
+    font-size: 13px; font-weight: 600; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dialog-line.role-steward .role-label { color: #8b6b1f; }
+  .dialog-line.role-passenger .role-label { color: #2a5d9a; }
+  .dialog-line .line-en { font-size: 14px; color: #333; margin-bottom: 4px; font-weight: 500; }
+  .dialog-line .line-cn { font-size: 13px; color: #777; margin-bottom: 8px; }
+  .dialog-line .read-btn {
+    background: #b83a3a; color: #fff; border: none; padding: 5px 12px;
+    border-radius: 14px; font-size: 12px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .dialog-line .read-btn:hover { background: #8b2e2e; }
+
+  .scene-controls {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    margin-top: 8px; padding-top: 12px; border-top: 1px dashed #eee;
+  }
+  .scene-controls button {
+    background: #fff; border: 1px solid #d0d0d0; border-radius: 16px;
+    padding: 6px 14px; font-size: 12px; cursor: pointer; color: #555;
+    display: inline-flex; align-items: center; gap: 4px;
+    transition: all 0.2s;
+  }
+  .scene-controls button:hover { border-color: #b83a3a; color: #b83a3a; }
+  .scene-controls button.recording { background: #b83a3a; color: #fff; border-color: #b83a3a; animation: pulse 1s infinite; }
+  .scene-controls .status-tag {
+    font-size: 12px; color: #aaa; margin-left: auto;
+  }
+  .scene-controls .status-tag.done { color: #2f855a; }
+
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+  }
+
   /* 角色分工 */
   .role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
   .role-item {
@@ -270,12 +332,6 @@
   .btn-cancel:hover { background: #cbd5e0; }
   .btn-voice { background: #b83a3a; color: #fff; }
   .btn-voice:hover { background: #8b2e2e; }
-  .btn-voice.recording { background: #d4a017; animation: pulse 1s infinite; }
-  @keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.6; }
-    100% { opacity: 1; }
-  }
 
   .preview-box {
     background: #fafafa; border-radius: 8px; padding: 16px 18px;
@@ -340,7 +396,8 @@
 
   @media print {
     .navbar, .btn-save, .btn-print, .read-btn, .record-btn, .vocab-card .actions button,
-    .btn-secondary, .btn-mini, .custom-input-area, .ref-sentence .grip { display: none !important; }
+    .btn-secondary, .btn-mini, .custom-input-area, .ref-sentence .grip,
+    .scene-controls button { display: none !important; }
     body { background: #fff; }
     .card { box-shadow: none; border: 1px solid #ddd; }
     .container { padding: 10px; }
@@ -466,7 +523,7 @@
     <div class="card">
       <div class="card-title"><span class="icon">📖</span> 雅居专列 &amp; 闽南建筑文化词汇</div>
       <p style="font-size:13px; color:#888; margin-bottom:16px;">
-        共40个核心词汇，涵盖主题列车服务、闽南建筑文化、海洋文化与泉州城市。点击“🔊 发音”听标准发音，点击“🎤 跟读评分”录音并显示评分结果。
+        共40个核心词汇。点击“🔊 发音”听标准发音，点击“🎤 跟读评分”录音并显示评分结果（总分、准确度、流畅度、完整度）。
       </p>
       <div class="vocab-grid" id="vocabGrid"></div>
     </div>
@@ -477,16 +534,27 @@
     <div class="card">
       <div class="card-title"><span class="icon">💬</span> 高铁乘务常用句型</div>
       <p style="font-size:13px; color:#888; margin-bottom:16px;">
-        点击“🔊 整句朗读”听标准发音，点击“🎤 跟读评分”录音并显示评分结果。
+        点击“🔊 整句朗读”听标准发音，点击“🎤 跟读评分”录音并显示评分结果（总分、准确度、流畅度、完整度）。
       </p>
       <div id="sentenceContainer"></div>
     </div>
   </section>
 
-  <!-- ===== 五、对话卡片 ===== -->
+  <!-- ===== 五、对话卡片（预设格式） ===== -->
   <section id="section-dialog" style="display:none;">
     <div class="card">
-      <div class="card-title"><span class="icon">🗂</span> 对话卡片 · 脚本编排</div>
+      <div class="card-title"><span class="icon">🗂</span> 高铁乘务服务对话卡片</div>
+      <p style="font-size:13px; color:#888; margin-bottom:16px;">
+        点击台词中任意单词可听该单词发音；点击台词下方的“🔊 整句朗读”按钮可听整句发音。
+      </p>
+      <div id="dialogContainer"></div>
+    </div>
+  </section>
+
+  <!-- ===== 六、模拟展演（原对话卡片中的角色分工 + 脚本编排） ===== -->
+  <section id="section-perform" style="display:none;">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎭</span> 模拟展演 · 脚本编排</div>
 
       <h3 style="font-size:15px; color:#8b2e2e; margin-bottom:12px;">1. 角色分工（4人一组）</h3>
       <p style="font-size:13px; color:#888; margin-bottom:12px;">4人乘务组，为每个岗位分配成员姓名。</p>
@@ -532,10 +600,7 @@
         <div class="preview-box" id="previewBox"></div>
       </div>
     </div>
-  </section>
 
-  <!-- ===== 六、模拟展演 ===== -->
-  <section id="section-perform" style="display:none;">
     <div class="card">
       <div class="card-title"><span class="icon">🎭</span> 模拟展演评分（教师用）</div>
       <table class="score-table">
@@ -684,7 +749,7 @@ function showToast(msg) {
 }
 
 /* ================= 小组信息 ================= */
-const GROUP_KEY = 'dwelling_train_quanzhou_group_v2';
+const GROUP_KEY = 'dwelling_train_quanzhou_group_v3';
 function saveGroup() {
   const ids = ['className', 'groupName', 'groupNo', 'task', 'teacher'];
   const data = {};
@@ -710,6 +775,51 @@ function loadGroup() {
       });
     }
   } catch (e) {}
+}
+
+/* ================= 语音合成 ================= */
+function speakEnglish(text, rate = 1.0) {
+  if ('speechSynthesis' in window) {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US';
+    u.rate = rate;
+    speechSynthesis.speak(u);
+  } else {
+    showToast('当前浏览器不支持语音合成');
+  }
+}
+
+/* ================= 模拟语音评测 ================= */
+function mockSpeechAssessment() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const accuracy = Math.floor(Math.random() * 20) + 80;
+      const fluency  = Math.floor(Math.random() * 20) + 80;
+      const integrity = Math.floor(Math.random() * 15) + 85;
+      const total = Math.round((accuracy + fluency + integrity) / 3);
+      resolve({
+        total_score: total,
+        accuracy_score: accuracy,
+        fluency_score: fluency,
+        integrity_score: integrity
+      });
+    }, 1200);
+  });
+}
+function renderScorePanel(container, result) {
+  container.innerHTML = `
+    <div class="score-panel total-row">
+      <div class="score-item">
+        <span class="label">总分</span>
+        <span class="value">${result.total_score}</span>
+      </div>
+    </div>
+    <div class="score-panel">
+      <div class="score-item"><span class="label">准确度</span><span class="value">${result.accuracy_score}</span></div>
+      <div class="score-item"><span class="label">流畅度</span><span class="value">${result.fluency_score}</span></div>
+      <div class="score-item"><span class="label">完整度</span><span class="value">${result.integrity_score}</span></div>
+    </div>
+  `;
 }
 
 /* ================= 词汇 ================= */
@@ -756,57 +866,6 @@ const vocabData = [
   { en: 'virtue', ph: '/ˈvɜːtʃuː/', cn: 'n. 美德' }
 ];
 
-/**
- * 模拟语音评测（仿科大讯飞 ISE 返回格式）
- * 真实接入时替换为后端 API 调用，返回 { total_score, accuracy_score, fluency_score, integrity_score }
- */
-function mockSpeechAssessment() {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const accuracy = Math.floor(Math.random() * 20) + 80;   // 准确度 80-99
-      const fluency  = Math.floor(Math.random() * 20) + 80;   // 流畅度 80-99
-      const integrity = Math.floor(Math.random() * 15) + 85;  // 完整度 85-99
-      const total = Math.round((accuracy + fluency + integrity) / 3);
-      resolve({
-        total_score: total,
-        accuracy_score: accuracy,
-        fluency_score: fluency,
-        integrity_score: integrity
-      });
-    }, 1200);
-  });
-}
-
-/**
- * 渲染评分面板
- * @param {HTMLElement} container - 承载评分结果的容器
- * @param {Object} result - 评分结果对象
- */
-function renderScorePanel(container, result) {
-  container.innerHTML = `
-    <div class="score-panel total-row">
-      <div class="score-item">
-        <span class="label">总分</span>
-        <span class="value">${result.total_score}</span>
-      </div>
-    </div>
-    <div class="score-panel">
-      <div class="score-item">
-        <span class="label">准确度</span>
-        <span class="value">${result.accuracy_score}</span>
-      </div>
-      <div class="score-item">
-        <span class="label">流畅度</span>
-        <span class="value">${result.fluency_score}</span>
-      </div>
-      <div class="score-item">
-        <span class="label">完整度</span>
-        <span class="value">${result.integrity_score}</span>
-      </div>
-    </div>
-  `;
-}
-
 function renderVocab() {
   const grid = document.getElementById('vocabGrid');
   grid.innerHTML = vocabData.map((v, i) => `
@@ -815,7 +874,7 @@ function renderVocab() {
       <div class="phonetic">${v.ph}</div>
       <div class="meaning">${v.cn}</div>
       <div class="actions">
-        <button onclick="playWord('${v.en.replace(/'/g, "\\'")}')">🔊 发音</button>
+        <button onclick="speakEnglish('${v.en.replace(/'/g, "\\'")}')">🔊 发音</button>
         <button class="record-btn" onclick="startVocabRead(${i})">🎤 跟读评分</button>
       </div>
       <div id="vocabScorePanel${i}"></div>
@@ -823,17 +882,6 @@ function renderVocab() {
   `).join('');
 }
 
-function playWord(word) {
-  if ('speechSynthesis' in window) {
-    const u = new SpeechSynthesisUtterance(word);
-    u.lang = 'en-US';
-    speechSynthesis.speak(u);
-  } else showToast('当前浏览器不支持语音合成');
-}
-
-/**
- * 词汇跟读评分（模拟）
- */
 async function startVocabRead(i) {
   const panel = document.getElementById('vocabScorePanel' + i);
   panel.innerHTML = `<div class="score-panel"><div class="loading">🎤 录音识别中，请朗读...</div></div>`;
@@ -913,7 +961,7 @@ function renderSentences() {
               <div class="cn">${item.cn}</div>
             </div>
             <div class="btn-group">
-              <button class="read-btn" onclick="playSentence('${item.en.replace(/'/g, "\\'")}')">🔊 整句朗读</button>
+              <button class="read-btn" onclick="speakEnglish('${item.en.replace(/'/g, "\\'")}', 0.9)">🔊 整句朗读</button>
               <button class="record-btn" onclick="startSentenceRead(${currentIdx})">🎤 跟读评分</button>
             </div>
           </div>
@@ -925,18 +973,6 @@ function renderSentences() {
   `).join('');
 }
 
-function playSentence(text) {
-  if ('speechSynthesis' in window) {
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'en-US';
-    u.rate = 0.9;
-    speechSynthesis.speak(u);
-  } else showToast('当前浏览器不支持语音合成');
-}
-
-/**
- * 句型跟读评分（模拟）
- */
 async function startSentenceRead(idx) {
   const panel = document.getElementById('sentenceScorePanel' + idx);
   panel.innerHTML = `<div class="score-panel"><div class="loading">🎤 录音识别中，请朗读...</div></div>`;
@@ -945,9 +981,155 @@ async function startSentenceRead(idx) {
   showToast(`总分 ${result.total_score}｜准确 ${result.accuracy_score}｜流利 ${result.fluency_score}｜完整 ${result.integrity_score}`);
 }
 
-/* ================= 脚本编排数据 ================= */
-const SCRIPT_KEY = 'dwelling_train_quanzhou_script_v2';
+/* ================= 对话卡片（预设格式） ================= */
+const dialogScenes = [
+  {
+    title: '情境 1：登车迎客',
+    desc: '站台迎客、检票验票并引导旅客入座，介绍主题列车特色。',
+    lines: [
+      { role: '列车员', en: 'Good morning, welcome aboard the Dwelling Themed Train.', cn: '早上好，欢迎乘坐雅居专列。' },
+      { role: '乘客', en: 'Thank you. Here is my ticket.', cn: '谢谢，这是我的车票。' },
+      { role: '列车员', en: 'May I see your ticket and ID card, please? Your seat is 12A in Car 5. Please go this way.', cn: '请出示您的车票和身份证好吗？您的座位是5号车厢12A，请这边走。' },
+      { role: '乘客', en: 'Great. This train looks elegant.', cn: '好的，这列车真雅致。' }
+    ]
+  },
+  {
+    title: '情境 2：车厢广播·闽南建筑文化',
+    desc: '列车发车后，列车员通过车厢广播介绍闽南建筑与红砖厝文化，旅客聆听并互动。',
+    lines: [
+      { role: '列车员', en: 'Ladies and gentlemen, welcome aboard the Dwelling Themed Train, bound for Quanzhou, the home of Minnan architecture.', cn: '女士们、先生们，欢迎乘坐雅居专列，本次列车开往闽南建筑之乡泉州。' },
+      { role: '列车员', en: 'Quanzhou is a historic city known for its red brick houses and swallowtail ridges.', cn: '泉州是一座以红砖厝和燕尾脊闻名的历史名城。' },
+      { role: '乘客', en: 'Wow, that sounds amazing! I can\'t wait to learn more.', cn: '哇，太了不起了！我迫不及待想了解更多。' },
+      { role: '列车员', en: 'Minnan architecture is famous for its red bricks, white stone, and curved roofs.', cn: '闽南建筑以红砖、白石和曲线屋顶著称。' }
+    ]
+  },
+  {
+    title: '情境 3：主题特产销售',
+    desc: '乘务员推车售卖泉州的特产，介绍德化白瓷、安溪铁观音、惠安影雕等特产，旅客询问并购买。',
+    lines: [
+      { role: '列车员', en: 'Good afternoon. Would you like to see some local specialties from Quanzhou?', cn: '下午好，您想看看泉州的当地特产吗？' },
+      { role: '乘客', en: 'Sure. What do you have?', cn: '好的，你们有什么？' },
+      { role: '列车员', en: 'This is a piece of Dehua white porcelain, a traditional folk art from Quanzhou.', cn: '这是一件德化白瓷，泉州的传统民间工艺。' },
+      { role: '乘客', en: 'It\'s beautiful. How much is it?', cn: '很漂亮，多少钱？' }
+    ]
+  },
+  {
+    title: '情境 4：车厢主题互动',
+    desc: '乘务员组织闽南建筑文化知识问答，讲解燕尾脊与骑楼，展示闽南传统建筑文化。',
+    lines: [
+      { role: '列车员', en: 'Welcome to our Minnan architecture culture corner. Would you like to join our quiz about Minnan architecture and maritime culture?', cn: '欢迎来到我们的闽南建筑文化角。您想参加闽南建筑与海洋文化知识问答吗？' },
+      { role: '乘客', en: 'I\'d love to. What\'s the quiz about?', cn: '我很乐意。问答是关于什么的？' },
+      { role: '列车员', en: 'It\'s about Minnan architecture and maritime culture. The swallowtail ridge is a distinctive feature of traditional Minnan houses.', cn: '是关于闽南建筑与海洋文化的。燕尾脊是传统闽南民居的显著特征。' },
+      { role: '乘客', en: 'Interesting! What\'s the question?', cn: '有意思！问题是什么？' }
+    ]
+  }
+];
 
+function renderDialogCards() {
+  const container = document.getElementById('dialogContainer');
+  container.innerHTML = dialogScenes.map((scene, sIdx) => `
+    <div class="dialog-scene">
+      <div class="scene-header">
+        <div class="scene-name">📌 ${scene.title}</div>
+        <div class="scene-desc">${scene.desc}</div>
+      </div>
+      ${scene.lines.map(line => {
+        const roleClass = line.role === '乘客' ? 'role-passenger' : 'role-steward';
+        const roleIcon = line.role === '乘客' ? '👤' : '🧑‍✈️';
+        return `
+          <div class="dialog-line ${roleClass}">
+            <div class="role-label">${roleIcon} ${line.role}</div>
+            <div class="line-en">${line.en}</div>
+            <div class="line-cn">${line.cn}</div>
+            <button class="read-btn" onclick="speakEnglish('${line.en.replace(/'/g, "\\'")}', 0.9)">🔊 整句朗读</button>
+          </div>
+        `;
+      }).join('')}
+      <div class="scene-controls">
+        <button onclick="playScene(${sIdx})">▶ 整段播放</button>
+        <button onclick="recordScene(${sIdx}, this)">⏺ 录音</button>
+        <button onclick="playRecord(${sIdx})">▶ 播放</button>
+        <button onclick="deleteRecord(${sIdx}, this)">🗑 删除</button>
+        <span class="status-tag" id="sceneStatus${sIdx}">🎙 未录音</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function playScene(sIdx) {
+  const scene = dialogScenes[sIdx];
+  let i = 0;
+  function playNext() {
+    if (i >= scene.lines.length) return;
+    const line = scene.lines[i];
+    const u = new SpeechSynthesisUtterance(line.en);
+    u.lang = 'en-US';
+    u.rate = 0.9;
+    u.onend = () => { i++; playNext(); };
+    speechSynthesis.speak(u);
+  }
+  playNext();
+  showToast('▶ 开始整段播放');
+}
+
+let sceneRecorders = {};
+function recordScene(sIdx, btn) {
+  if (sceneRecorders[sIdx] && sceneRecorders[sIdx].recording) {
+    sceneRecorders[sIdx].stop();
+    btn.classList.remove('recording');
+    btn.textContent = '⏺ 录音';
+    return;
+  }
+  if (!navigator.mediaDevices || !window.MediaRecorder) {
+    showToast('当前浏览器不支持录音');
+    return;
+  }
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    const recorder = new MediaRecorder(stream);
+    const chunks = [];
+    recorder.ondataavailable = e => chunks.push(e.data);
+    recorder.onstop = () => {
+      const blob = new Blob(chunks, { type: 'audio/webm' });
+      sceneRecorders[sIdx].blob = blob;
+      sceneRecorders[sIdx].recording = false;
+      stream.getTracks().forEach(t => t.stop());
+      const status = document.getElementById('sceneStatus' + sIdx);
+      if (status) { status.textContent = '✅ 已录音'; status.classList.add('done'); }
+      showToast('✅ 录音完成');
+    };
+    recorder.start();
+    sceneRecorders[sIdx] = { recorder, recording: true };
+    btn.classList.add('recording');
+    btn.textContent = '⏹ 停止';
+    showToast('🎤 正在录音...');
+  }).catch(err => {
+    showToast('无法访问麦克风：' + err.message);
+  });
+}
+
+function playRecord(sIdx) {
+  const rec = sceneRecorders[sIdx];
+  if (!rec || !rec.blob) { showToast('暂无录音'); return; }
+  const url = URL.createObjectURL(rec.blob);
+  const audio = new Audio(url);
+  audio.play();
+  showToast('▶ 播放录音');
+}
+
+function deleteRecord(sIdx, btn) {
+  if (sceneRecorders[sIdx]) {
+    if (sceneRecorders[sIdx].recorder && sceneRecorders[sIdx].recording) {
+      sceneRecorders[sIdx].recorder.stop();
+    }
+    delete sceneRecorders[sIdx];
+  }
+  const status = document.getElementById('sceneStatus' + sIdx);
+  if (status) { status.textContent = '🎙 未录音'; status.classList.remove('done'); }
+  showToast('🗑 已删除录音');
+}
+
+/* ================= 脚本编排（原对话卡片内容，移到模拟展演） ================= */
+const SCRIPT_KEY = 'dwelling_train_quanzhou_script_v3';
 const sceneConfig = [
   { id: 'scene1', title: '情境 1：登车迎客', roles: ['列车员', '乘客'] },
   { id: 'scene2', title: '情境 2：车厢广播', roles: ['列车员', '乘客'] },
@@ -1006,7 +1188,6 @@ function initScriptState() {
     sc.roles.forEach(r => { scriptState[sc.id][r] = []; });
   });
 }
-
 function loadScriptState() {
   const saved = localStorage.getItem(SCRIPT_KEY);
   if (!saved) return false;
@@ -1019,13 +1200,13 @@ function loadScriptState() {
   } catch (e) {}
   return false;
 }
-
 function saveScriptState() {
   localStorage.setItem(SCRIPT_KEY, JSON.stringify(scriptState));
 }
 
 function renderScript() {
   const container = document.getElementById('scriptContainer');
+  if (!container) return;
   container.innerHTML = sceneConfig.map(sc => `
     <div class="script-scene" data-scene="${sc.id}">
       <div class="scene-title">📌 ${sc.title}</div>
@@ -1293,6 +1474,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadGroup();
   renderVocab();
   renderSentences();
+  renderDialogCards();
   initScriptState();
   const hasSaved = loadScriptState();
   if (!hasSaved) {
