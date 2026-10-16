@@ -1,4 +1,4 @@
-[index.html](https://github.com/user-attachments/files/33543848/index.html)
+[index.html](https://github.com/user-attachments/files/33544103/index.html)
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -551,12 +551,11 @@
     </div>
   </section>
 
-  <!-- ===== 六、模拟展演（原对话卡片中的角色分工 + 脚本编排） ===== -->
+  <!-- ===== 六、模拟展演 ===== -->
   <section id="section-perform" style="display:none;">
+    <!-- 1. 角色分工 -->
     <div class="card">
-      <div class="card-title"><span class="icon">🎭</span> 模拟展演 · 脚本编排</div>
-
-      <h3 style="font-size:15px; color:#8b2e2e; margin-bottom:12px;">1. 角色分工（4人一组）</h3>
+      <div class="card-title"><span class="icon">🎭</span> 1. 角色分工（4人一组）</div>
       <p style="font-size:13px; color:#888; margin-bottom:12px;">4人乘务组，为每个岗位分配成员姓名。</p>
       <div class="role-grid">
         <div class="role-item">
@@ -580,27 +579,28 @@
           <input type="text" class="role-input" data-role="attendant" placeholder="姓名...">
         </div>
       </div>
+    </div>
 
-      <h3 style="font-size:15px; color:#8b2e2e; margin:24px 0 12px;">2. 对话文本编写</h3>
+    <!-- 2. 对话文本编写 -->
+    <div class="card">
+      <div class="card-title"><span class="icon">📝</span> 2. 对话文本编写</div>
       <p style="font-size:13px; color:#888; margin-bottom:12px;">
         按四大情境顺序，为每个步骤编写相应的脚本内容。参考句型可<strong>拖动</strong>到下方角色槽位，也可以点击“+ 自定义台词”手动输入或语音输入。
       </p>
-
       <div id="scriptContainer"></div>
-
       <div class="form-actions" style="margin-top:20px;">
         <button class="btn-save" onclick="saveScript()">💾 保存脚本</button>
         <button class="btn-secondary" onclick="previewScript()">👁 预览对话</button>
         <button class="btn-secondary" onclick="downloadScript()">⬇ 下载对话文本</button>
         <button class="btn-secondary" onclick="resetScript()">↺ 重置为默认流程</button>
       </div>
-
       <div id="previewArea" style="margin-top:20px; display:none;">
         <h3 style="font-size:15px; color:#8b2e2e; margin-bottom:10px;">对话预览</h3>
         <div class="preview-box" id="previewBox"></div>
       </div>
     </div>
 
+    <!-- 模拟展演评分 -->
     <div class="card">
       <div class="card-title"><span class="icon">🎭</span> 模拟展演评分（教师用）</div>
       <table class="score-table">
@@ -749,7 +749,7 @@ function showToast(msg) {
 }
 
 /* ================= 小组信息 ================= */
-const GROUP_KEY = 'dwelling_train_quanzhou_group_v3';
+const GROUP_KEY = 'dwelling_train_quanzhou_group_v4';
 function saveGroup() {
   const ids = ['className', 'groupName', 'groupNo', 'task', 'teacher'];
   const data = {};
@@ -1128,8 +1128,8 @@ function deleteRecord(sIdx, btn) {
   showToast('🗑 已删除录音');
 }
 
-/* ================= 脚本编排（原对话卡片内容，移到模拟展演） ================= */
-const SCRIPT_KEY = 'dwelling_train_quanzhou_script_v3';
+/* ================= 脚本编排（模拟展演内） ================= */
+const SCRIPT_KEY = 'dwelling_train_quanzhou_script_v4';
 const sceneConfig = [
   { id: 'scene1', title: '情境 1：登车迎客', roles: ['列车员', '乘客'] },
   { id: 'scene2', title: '情境 2：车厢广播', roles: ['列车员', '乘客'] },
